@@ -4,14 +4,17 @@ on: [push]
 
 jobs:
 
-  build:
+  lint:
     runs-on: ubuntu-latest
-    container: hadolint/hadolint
+    container: pipelinecomponents/hadolint:latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: Perform Docker linter
-        # uses: docker://hub.docker.com/u/hadolint
-        run: docker run --rm -i hadolint/hadolint < Dockerfile
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag john-the-ripper:$(date +%s) --build-arg JOHN_URL=https://www.openwall.com/john/k/john-1.9.0-jumbo-1.tar.gz
+      - uses: actions/checkout@v1
+      - name: Run hadolint
+        run: hadolint Dockerfile
+#      - name: Checkout
+#        uses: actions/checkout@v1
+#      - name: Perform Docker linter
+#        # uses: docker://hub.docker.com/u/hadolint
+#        run: docker run --rm -i hadolint/hadolint < Dockerfile
+#      - name: Build the Docker image
+#        run: docker build . --file Dockerfile --tag john-the-ripper:$(date +%s) --build-arg JOHN_URL=https://www.openwall.com/john/k/john-1.9.0-jumbo-1.tar.gz
