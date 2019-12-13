@@ -18,10 +18,9 @@ RUN curl "$JOHN_URL" -o john.tar.gz && \
 WORKDIR $JOHN_DIR/src
 RUN sh configure && \
     make -s clean && \
-    make -sj4 && \
-    cp "$JOHN_DIR/run/john" "${HOME}" && \
-    rm -rf "${JOHN_DIR}"
+    make -sj4
 
+WORKDIR $JOHN_DIR/conf
 CMD ["/bin/bash"]
 
 

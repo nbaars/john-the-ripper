@@ -31,7 +31,7 @@ jobs:
       - name: Variables
         run: cat Dockerfile | grep JOHN_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g' > JOHN_VERSION
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${IMAGE_NAME}:$(cat JOHN_VERSION)
+        run: docker build . --file Dockerfile --tag ${IMAGE_NAME}:$(cat JOHN_VERSION) --tag $IMAGE_NAME:latest
       - name: Save Docker image artifact
         run: docker save -o build.tar ${IMAGE_NAME}
       - name: Upload image artifact
@@ -46,8 +46,6 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
       - name: Pull Image artifact
         uses: actions/download-artifact@master
         with:
