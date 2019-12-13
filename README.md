@@ -5,19 +5,19 @@
 This repository contains a Docker file which creates a Docker image for
 using John the Ripper.
 
-
 ## Usage
 
 Pull the image:
 
-```
+```shell script
 docker pull -t nbaars/john-the-ripper
 ```
 
 Running:
 
-```
-docker run -it nbaars/john-the-ripper -v .:/home/john/data
+```shell script
+docker run -it nbaars/john-the-ripper -v ${PWD}/examples:/home/john/examples
 ```
 
 Once you have a shell in the container you can start running a command:
+
