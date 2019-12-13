@@ -3,7 +3,7 @@ name: CI pipeline for John the Ripper
 on: [push]
 
 env:
-  IMAGE_NAME: john-the-ripper
+  IMAGE_NAME: nbaars/john-the-ripper
 
 jobs:
   markdown-lint:
@@ -57,4 +57,4 @@ jobs:
       - name: Docker login
         run: echo "${{secrets.DOCKER_HUB_API_KEY}}" | docker login --username nbaars --password-stdin
       - name: Push the image to Docker Hub
-        run: docker push nbaars/"$IMAGE_NAME"
+        run: docker push "$IMAGE_NAME"
