@@ -52,4 +52,4 @@ jobs:
       - name: Load image into docker context
         run: docker load -i docker-image/build.tar
       - name: Push the image to Docker Hub
-      - run: docker push nbaars/john-the-ripper --tag latest
+        run: docker push nbaars/john-the-ripper --tag latest
