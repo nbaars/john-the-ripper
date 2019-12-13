@@ -57,10 +57,10 @@ jobs:
       - name: Load image into docker context
         run: docker load -i docker-image/build.tar
       - name: Docker login
-        run: echo "${API_KEY}" | docker login --username nbaars --password-stdin
         with:
           API_KEY: ${{ secrets.DOCKER_HUB_API_KEY }}
+        run: echo "${API_KEY}" | docker login --username nbaars --password-stdin
       - name: Push the image to Docker Hub
         run: docker push nbaars/${IMAGE_NAME}
-        with: # Set the secret as an input
+        with:
           super_secret: ${{ secrets.SuperSecret }}
