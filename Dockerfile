@@ -15,7 +15,7 @@ WORKDIR /home/john
 
 RUN curl "$JOHN_URL" -o john.tar.gz && \
     tar zfxv john.tar.gz && rm john.tar.gz
-WORKDIR "$JOHN_DIR/src"
+WORKDIR $JOHN_DIR/src
 RUN sh configure && \
     make -s clean && \
     make -sj4 && \
