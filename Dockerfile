@@ -1,8 +1,8 @@
 FROM debian:buster-slim
 
-#https://www.openwall.com/john/k/john-1.9.0-jumbo-1.tar.gz
-ARG JOHN_URL
-ENV john_dir /home/john/john-1.9.0-jumbo-1
+ARG JOHN_VERSION="john-1.9.0-jumbo-1"
+ARG JOHN_URL="https://www.openwall.com/john/k/${JOHN_VERSION}.tar.gz"
+ENV JOHN_DIR /home/john/john-1.9.0-jumbo-1
 
 RUN apt-get update && \
     apt-get install -yq curl net-tools bash make gcc openssl libgmp-dev ocl-icd-opencl-dev libssl-dev libbz2-dev zlib1g-dev libpcap-dev && \
@@ -15,12 +15,12 @@ WORKDIR /home/john
 
 RUN curl "$JOHN_URL" -o john.tar.gz && \
     tar zfxv john.tar.gz && rm john.tar.gz
-WORKDIR ${john_dir}
+WORKDIR ${JOHN_DIR}
 RUN sh configure && \
     make -s clean && \
     make -sj4 && \
-    cp "$john_dir/run/john" "${HOME}" && \
-    rm -rf "${john_dir}"
+    cp "$JOHN_DIR/run/john" "${HOME}" && \
+    rm -rf "${JOHN_DIR}"
 
 CMD ["/bin/bash"]
 

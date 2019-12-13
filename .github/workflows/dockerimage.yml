@@ -3,8 +3,7 @@ name: CI pipeline for John the Ripper
 on: [push]
 
 env:
-  JOHN_VERSION: 1.9.0-jumbo-1
-  IMAGE_NAME: john-the-ripper:${{JOHN_VERSION}}
+  IMAGE_NAME: john-the-ripper
 
 jobs:
   markdown-lint:
@@ -29,10 +28,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Variables
+        run: cat Dockerfile | grep JOHN_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g' > JOHN_VERSION
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${IMAGE_NAME} --build-arg JOHN_URL=https://www.openwall.com/john/k/john-${JOH_VERSION}.tar.gz
+        run: docker build . --file Dockerfile --tag ${IMAGE_NAME}:$(cat JOHN_VERSION)
       - name: Save Docker image artifact
-        run: docker save -o build.tar ${IMAGE_NAME}
+        run: docker save -o build.tar ${IMAGE_NAME}:$(cat JOHN_VERSION)
       - name: Upload image artifact
         uses: actions/upload-artifact@master
         with:
@@ -45,6 +46,10 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Variables
+        run: cat Dockerfile | grep JOHN_VERSION= | head -n 1 | grep -o '".*"' | sed 's/"//g' > JOHN_VERSION
       - name: Pull Image artifact
         uses: actions/download-artifact@master
         with:
@@ -52,4 +57,4 @@ jobs:
       - name: Load image into docker context
         run: docker load -i docker-image/build.tar
       - name: Push the image to Docker Hub
-        run: docker push nbaars/john-the-ripper --tag latest
+        run: docker push nbaars/${IMAGE_NAME}:$(cat JOHN_VERSION) --tag latest
