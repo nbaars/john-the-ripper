@@ -4,8 +4,8 @@ FROM debian:buster-slim
 ARG JOHN_URL
 ENV john_dir /home/john/john-1.9.0-jumbo-1
 
-RUN apt-get update --no-install-recommends && \
-    apt-get install -yq --no-install-recommends curl net-tools bash make gcc openssl libgmp-dev ocl-icd-opencl-dev libssl-dev libbz2-dev zlib1g-dev libpcap-dev && \
+RUN apt-get update && \
+    apt-get install -yq curl net-tools bash make gcc openssl libgmp-dev ocl-icd-opencl-dev libssl-dev libbz2-dev zlib1g-dev libpcap-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
