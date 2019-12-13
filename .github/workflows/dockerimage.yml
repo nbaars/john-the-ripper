@@ -4,7 +4,14 @@ on: [push]
 
 jobs:
 
-  lint:
+  markdown-lint:
+    runs-on: ubuntu-latest
+    container: pipelinecomponents/markdownlint:latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Run markdown lint
+        run: mdl --style all --warnings .
+  docker-lint:
     runs-on: ubuntu-latest
     container: pipelinecomponents/hadolint:latest
     steps:
