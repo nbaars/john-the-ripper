@@ -8,11 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     container: hadolint/hadolint
     steps:
-      - name: Perform Docker linter
-        uses: actions/checkout@v1
-        # uses: docker://hub.docker.com/u/hadolint
-        run: docker run --rm -i hadolint/hadolint < Dockerfile
       - name: Checkout
         uses: actions/checkout@v1
+      - name: Perform Docker linter
+        # uses: docker://hub.docker.com/u/hadolint
+        run: docker run --rm -i hadolint/hadolint < Dockerfile
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag john-the-ripper:$(date +%s) --build-arg JOHN_URL=https://www.openwall.com/john/k/john-1.9.0-jumbo-1.tar.gz
