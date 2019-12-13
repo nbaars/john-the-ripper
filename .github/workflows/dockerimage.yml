@@ -6,9 +6,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    container: hadolint/hadolint
     steps:
       - name: Perform Docker linter
-        uses: docker://hub.docker.com/u/hadolint
+       # uses: docker://hub.docker.com/u/hadolint
         run: docker run --rm -i hadolint/hadolint < Dockerfile
       - name: Checkout
         uses: actions/checkout@v1
