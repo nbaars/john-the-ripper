@@ -20,7 +20,7 @@ RUN sh configure && \
     make -s clean && \
     make -sj4
 
-WORKDIR $JOHN_DIR/conf
+WORKDIR $JOHN_DIR/run
 CMD ["/bin/bash"]
 
 
