@@ -1,9 +1,11 @@
-name: Docker Image CI
+name: CI pipeline for John the Ripper
 
 on: [push]
 
-jobs:
+env:
+  JOHN_VERSION: 1.9.0-jumbo-1
 
+jobs:
   markdown-lint:
     runs-on: ubuntu-latest
     container: pipelinecomponents/markdownlint:latest
@@ -17,11 +19,19 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Run hadolint
-        run: hadolint Dockerfile
-#      - name: Checkout
-#        uses: actions/checkout@v1
-#      - name: Perform Docker linter
-#        # uses: docker://hub.docker.com/u/hadolint
-#        run: docker run --rm -i hadolint/hadolint < Dockerfile
-#      - name: Build the Docker image
-#        run: docker build . --file Dockerfile --tag john-the-ripper:$(date +%s) --build-arg JOHN_URL=https://www.openwall.com/john/k/john-1.9.0-jumbo-1.tar.gz
+        run: hadolint --ignore DL3008 Dockerfile
+  build:
+    runs-on: ubuntu-latest
+    needs: ['docker-lint']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag john-the-ripper:${JOHN_VERSION} --build-arg JOHN_URL=https://www.openwall.com/john/k/john-${JOHN_VERSION}.tar.gz
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: docker push nbaars/john-the-ripper --tag latest
